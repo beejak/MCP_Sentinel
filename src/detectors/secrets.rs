@@ -138,11 +138,33 @@ static SECRET_PATTERNS: Lazy<Vec<SecretPattern>> = Lazy::new(|| {
     ]
 });
 
-/// Detect exposed secrets in code
+/// Detect exposed secrets in source code and configuration files
+///
+/// Scans the provided content line-by-line against all known secret patterns.
+/// Each match generates a vulnerability with location, severity, and remediation advice.
+///
+/// # Arguments
+///
+/// * `content` - The file content to scan (UTF-8 text)
+/// * `file_path` - Path to the file being scanned (for location reporting)
+///
+/// # Returns
+///
+/// A vector of vulnerabilities (empty if no secrets found), or an error if scanning fails.
+/// Note: This function currently never returns errors, but uses Result for future-proofing.
+///
+/// # Example
+///
+/// ```rust
+/// let content = r#"AWS_KEY = "AKIAIOSFODNN7EXAMPLE""#;
+/// let vulns = detect(content, "config.py")?;
+/// assert!(!vulns.is_empty());
+/// ```
 pub fn detect(content: &str, file_path: &str) -> Result<Vec<Vulnerability>> {
     let mut vulnerabilities = Vec::new();
     let mut id_counter = 1;
 
+    // Scan line-by-line for better location reporting
     for (line_num, line) in content.lines().enumerate() {
         for pattern in SECRET_PATTERNS.iter() {
             if let Some(captures) = pattern.regex.captures(line) {
@@ -153,7 +175,7 @@ pub fn detect(content: &str, file_path: &str) -> Result<Vec<Vulnerability>> {
                     .map(|m| m.as_str())
                     .unwrap_or("");
 
-                // Redact the secret in the description
+                // Redact the secret for safe display (never show full secret in output)
                 let redacted = redact_secret(secret_text);
 
                 let vuln = Vulnerability::new(
@@ -201,6 +223,24 @@ pub fn detect(content: &str, file_path: &str) -> Result<Vec<Vulnerability>> {
 }
 
 /// Redact a secret for safe display
+///
+/// Transforms secrets into a safe format for display in reports and logs.
+/// This prevents accidental exposure of real credentials in scan output.
+///
+/// # Redaction Algorithm
+///
+/// - **Short secrets** (≤8 chars): Replace with asterisks (e.g., "short" → "*****")
+/// - **Long secrets** (>8 chars): Show prefix and suffix (e.g., "AKIAIOSFODNN7EXAMPLE" → "AKIA...MPLE")
+///   - Prefix: First 4 chars or 25% of length, whichever is smaller
+///   - Suffix: Last 4 chars or 25% of length, whichever is smaller
+///
+/// # Examples
+///
+/// ```rust
+/// assert_eq!(redact_secret("short"), "*****");
+/// assert_eq!(redact_secret("AKIAIOSFODNN7EXAMPLE"), "AKIA...MPLE");
+/// assert_eq!(redact_secret("sk-1234567890abcdefghij"), "sk-1...ghij");
+/// ```
 fn redact_secret(secret: &str) -> String {
     if secret.len() <= 8 {
         "*".repeat(secret.len())
