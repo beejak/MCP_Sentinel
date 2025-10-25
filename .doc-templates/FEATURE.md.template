@@ -1,0 +1,499 @@
+# {{FEATURE_NAME}} Feature Documentation
+
+**Status:** Draft
+**Version:** {{VERSION}}
+**Author:** {{AUTHOR}}
+**Date:** {{DATE}}
+
+---
+
+## ✅ Documentation Checklist
+
+- [ ] Overview and use cases
+- [ ] Step-by-step getting started guide
+- [ ] Configuration options documented
+- [ ] CLI commands/options documented
+- [ ] API reference (if applicable)
+- [ ] At least 3 usage examples
+- [ ] Integration examples (CI/CD, scripts, etc.)
+- [ ] Troubleshooting section
+- [ ] Best practices
+- [ ] Added to USER_GUIDE.md
+- [ ] Added to EXAMPLES.md
+- [ ] Added to COMMAND_REFERENCE.md (if CLI command)
+- [ ] Added to FAQ.md
+- [ ] Updated README.md
+- [ ] Updated CHANGELOG.md
+- [ ] Tests written
+
+---
+
+## Overview
+
+### What is {{FEATURE_NAME}}?
+
+[Brief description of the feature in 1-2 sentences]
+
+### Why was it created?
+
+[Problem it solves, use cases it enables]
+
+### Key Benefits
+
+- ✅ **Benefit 1:** [Description]
+- ✅ **Benefit 2:** [Description]
+- ✅ **Benefit 3:** [Description]
+
+---
+
+## Use Cases
+
+### Use Case 1: [Name]
+
+**Scenario:** [Describe the scenario]
+
+**How {{FEATURE_NAME}} helps:** [Explanation]
+
+**Example:**
+```bash
+# Command or code example
+{{EXAMPLE_1}}
+```
+
+### Use Case 2: [Name]
+
+[Add more use cases]
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+[List requirements]
+
+- Requirement 1
+- Requirement 2
+
+### Quick Start
+
+**Step 1: [Action]**
+
+```bash
+{{COMMAND_1}}
+```
+
+[Explanation]
+
+**Step 2: [Action]**
+
+```bash
+{{COMMAND_2}}
+```
+
+[Explanation]
+
+**Step 3: [Action]**
+
+[Steps continue...]
+
+**Expected Output:**
+
+```
+{{EXPECTED_OUTPUT}}
+```
+
+---
+
+## Configuration
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `{{OPTION_1}}` | {{TYPE}} | `{{DEFAULT}}` | {{DESCRIPTION}} |
+| `{{OPTION_2}}` | {{TYPE}} | `{{DEFAULT}}` | {{DESCRIPTION}} |
+
+### Configuration File
+
+```yaml
+# .mcp-sentinel.yml (if applicable)
+{{FEATURE_ID}}:
+  enabled: true
+  option1: value1
+  option2: value2
+```
+
+### Environment Variables
+
+```bash
+export MCP_{{FEATURE_NAME_UPPER}}={{VALUE}}
+```
+
+---
+
+## CLI Reference
+
+### Commands
+
+#### `mcp-sentinel {{COMMAND}}`
+
+**Synopsis:**
+```bash
+mcp-sentinel {{COMMAND}} [OPTIONS] [ARGS]
+```
+
+**Description:**
+[What this command does]
+
+**Options:**
+
+| Option | Short | Description | Example |
+|--------|-------|-------------|---------|
+| `--{{OPTION_1}}` | `-{{SHORT}}` | {{DESCRIPTION}} | `--{{OPTION_1}}={{VALUE}}` |
+
+**Examples:**
+
+```bash
+# Example 1: [Description]
+mcp-sentinel {{COMMAND}} {{EXAMPLE_ARGS_1}}
+
+# Example 2: [Description]
+mcp-sentinel {{COMMAND}} {{EXAMPLE_ARGS_2}}
+```
+
+**Exit Codes:**
+
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | Error |
+
+---
+
+## Examples
+
+### Example 1: [Scenario Name]
+
+**Goal:** [What we're trying to achieve]
+
+**Setup:**
+```bash
+# Any setup needed
+{{SETUP_COMMANDS}}
+```
+
+**Usage:**
+```bash
+{{USAGE_COMMAND}}
+```
+
+**Output:**
+```
+{{EXPECTED_OUTPUT}}
+```
+
+**Explanation:**
+[What happened and why]
+
+---
+
+### Example 2: [Scenario Name]
+
+[Add more examples - aim for at least 3]
+
+---
+
+### Example 3: Real-World Integration
+
+**Scenario:** [Real production-like scenario]
+
+**Complete workflow:**
+
+```bash
+#!/bin/bash
+# {{SCRIPT_NAME}}.sh
+
+{{COMPLETE_SCRIPT}}
+```
+
+**How to use:**
+```bash
+chmod +x {{SCRIPT_NAME}}.sh
+./{{SCRIPT_NAME}}.sh
+```
+
+---
+
+## Integration
+
+### CI/CD Integration
+
+#### GitHub Actions
+
+```yaml
+# .github/workflows/{{FEATURE_ID}}.yml
+name: {{FEATURE_NAME}}
+
+on: [push, pull_request]
+
+jobs:
+  {{JOB_NAME}}:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run {{FEATURE_NAME}}
+        run: |
+          {{COMMANDS}}
+```
+
+#### GitLab CI
+
+```yaml
+# .gitlab-ci.yml
+{{FEATURE_ID}}:
+  stage: {{STAGE}}
+  script:
+    - {{COMMANDS}}
+```
+
+### Script Integration
+
+```python
+# {{SCRIPT_NAME}}.py
+import subprocess
+import json
+
+def use_{{FEATURE_ID}}():
+    """Example integration"""
+    result = subprocess.run(
+        ['mcp-sentinel', '{{COMMAND}}'],
+        capture_output=True,
+        text=True
+    )
+
+    # Process result
+    data = json.loads(result.stdout)
+    return data
+
+if __name__ == '__main__':
+    result = use_{{FEATURE_ID}}()
+    print(f"Result: {result}")
+```
+
+---
+
+## API Reference
+
+### Functions/Methods (if applicable)
+
+#### `{{FUNCTION_NAME}}()`
+
+**Signature:**
+```rust
+pub fn {{FUNCTION_NAME}}({{PARAMS}}) -> Result<{{RETURN_TYPE}}, Error>
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{{PARAM_1}}` | `{{TYPE}}` | {{DESCRIPTION}} |
+
+**Returns:**
+
+`Result<{{RETURN_TYPE}}, Error>`
+
+**Example:**
+
+```rust
+{{USAGE_EXAMPLE}}
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Issue 1: [Problem Description]
+
+**Symptoms:**
+[What users will see]
+
+**Cause:**
+[Why this happens]
+
+**Solution:**
+
+```bash
+# Step-by-step fix
+{{FIX_COMMANDS}}
+```
+
+#### Issue 2: [Problem Description]
+
+[Add more issues]
+
+### Debugging
+
+**Enable verbose output:**
+
+```bash
+mcp-sentinel {{COMMAND}} -v
+```
+
+**Check logs:**
+
+```bash
+tail -f ~/.mcp-sentinel/logs/{{FEATURE_ID}}.log
+```
+
+---
+
+## Best Practices
+
+### Do's ✅
+
+1. **[Practice 1]:** [Explanation]
+   ```bash
+   # Example
+   {{GOOD_EXAMPLE_1}}
+   ```
+
+2. **[Practice 2]:** [Explanation]
+
+### Don'ts ❌
+
+1. **[Anti-pattern 1]:** [Explanation]
+   ```bash
+   # Don't do this
+   {{BAD_EXAMPLE_1}}
+   ```
+
+2. **[Anti-pattern 2]:** [Explanation]
+
+---
+
+## Performance
+
+### Benchmarks
+
+| Operation | Time | Memory |
+|-----------|------|--------|
+| {{OPERATION_1}} | {{TIME}} | {{MEMORY}} |
+| {{OPERATION_2}} | {{TIME}} | {{MEMORY}} |
+
+### Optimization Tips
+
+1. [Tip 1]
+2. [Tip 2]
+
+---
+
+## Advanced Usage
+
+### Advanced Technique 1: [Name]
+
+[Description and example]
+
+```bash
+{{ADVANCED_EXAMPLE_1}}
+```
+
+### Advanced Technique 2: [Name]
+
+[Add more advanced patterns]
+
+---
+
+## Limitations
+
+### Known Limitations
+
+1. **[Limitation 1]:** [Description and workaround if any]
+2. **[Limitation 2]:** [Description]
+
+### Future Enhancements
+
+Planned improvements:
+
+- [ ] [Enhancement 1]
+- [ ] [Enhancement 2]
+- [ ] [Enhancement 3]
+
+---
+
+## Testing
+
+### Unit Tests
+
+**Location:** `tests/{{FEATURE_ID}}_test.rs`
+
+**Run tests:**
+```bash
+cargo test {{FEATURE_ID}}
+```
+
+### Integration Tests
+
+**Location:** `tests/integration/{{FEATURE_ID}}_integration_test.rs`
+
+**Test scenarios:**
+- [ ] Basic functionality
+- [ ] Edge cases
+- [ ] Error handling
+- [ ] Performance
+- [ ] Integration with other features
+
+---
+
+## References
+
+### Documentation
+
+- [USER_GUIDE.md](USER_GUIDE.md#{{FEATURE_ID}})
+- [EXAMPLES.md](EXAMPLES.md#{{FEATURE_ID}})
+- [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md#{{COMMAND}})
+
+### External Resources
+
+- [External link 1]
+- [External link 2]
+
+---
+
+## Changelog
+
+### Version {{VERSION}}
+
+- Initial release of {{FEATURE_NAME}}
+- [Feature detail 1]
+- [Feature detail 2]
+
+---
+
+## Sign-off
+
+### Completion Checklist
+
+- [ ] All documentation sections complete
+- [ ] Examples tested and working
+- [ ] Integration examples tested
+- [ ] Troubleshooting verified
+- [ ] All cross-references updated
+- [ ] Tests passing
+- [ ] Peer review completed
+- [ ] CI/CD validation passing
+
+### Review
+
+- **Code Review:** [Name] - [Date]
+- **Documentation Review:** [Name] - [Date]
+- **Final Approval:** [Name] - [Date]
+
+---
+
+**Status:** [Draft | In Review | Approved | Released]
+**Released in version:** [Version]
