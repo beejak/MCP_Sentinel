@@ -30,11 +30,17 @@ pub async fn execute(
 
     // Check if target exists
     if !target_path.exists() {
-        anyhow::bail!("Target path does not exist: {}", target);
+        anyhow::bail!(
+            "Target path does not exist: '{}'\nPlease provide a valid directory path.",
+            target
+        );
     }
 
     if !target_path.is_dir() {
-        anyhow::bail!("Target must be a directory: {}", target);
+        anyhow::bail!(
+            "Target must be a directory, but '{}' is a file.\nPlease provide a directory to scan.",
+            target
+        );
     }
 
     // Create scanner configuration
@@ -45,7 +51,7 @@ pub async fn execute(
     let result = scanner
         .scan_directory(&target_path)
         .await
-        .context("Scan failed")?;
+        .context(format!("Failed to scan directory '{}'", target))?;
 
     // Output results
     match output {
