@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Result};
 use std::path::PathBuf;
-use tracing::{debug, info};
+use tracing::{debug, error, info, warn};
 
 use super::types::{LlmProvider, OutputFormat, ScanMode, SeverityLevel};
 use crate::models::config::ScanConfig;
@@ -48,28 +48,44 @@ pub async fn execute(
     let scanner = Scanner::new(config);
 
     // Run scan
-    let result = scanner
-        .scan_directory(&target_path)
-        .await
-        .context(format!("Failed to scan directory '{}'", target))?;
+    let result = match scanner.scan_directory(&target_path).await {
+        Ok(r) => r,
+        Err(e) => {
+            error!("Scan failed for '{}': {}", target, e);
+            return Err(e).context(format!("Failed to scan directory '{}'", target));
+        }
+    };
 
     // Output results
     match output {
         OutputFormat::Terminal => {
-            crate::output::terminal::render(&result)?;
+            if let Err(e) = crate::output::terminal::render(&result) {
+                error!("Failed to render terminal output: {}", e);
+                return Err(e);
+            }
         }
         OutputFormat::Json => {
-            let json = crate::output::json::generate(&result)
-                .context("Failed to generate JSON report")?;
+            let json = match crate::output::json::generate(&result) {
+                Ok(j) => j,
+                Err(e) => {
+                    error!("Failed to generate JSON report: {}", e);
+                    return Err(e).context("Failed to generate JSON report");
+                }
+            };
+
             if let Some(file_path) = &output_file {
-                std::fs::write(file_path, &json)
-                    .context(format!("Failed to write report to '{}'", file_path))?;
+                if let Err(e) = std::fs::write(file_path, &json) {
+                    error!("Failed to write report to '{}': {}", file_path, e);
+                    return Err(e).context(format!("Failed to write report to '{}'", file_path));
+                }
+                info!("Report saved to: {}", file_path);
                 println!("✅ Report saved to: {}", file_path);
             } else {
                 println!("{}", json);
             }
         }
         _ => {
+            error!("Output format {:?} not yet implemented", output);
             anyhow::bail!("Output format {:?} not yet implemented", output);
         }
     }
@@ -84,6 +100,10 @@ pub async fn execute(
         };
 
         if result.has_issues_at_level(threshold_severity) {
+            warn!(
+                "Vulnerabilities found at or above {:?} threshold: {} critical, {} high",
+                threshold, result.summary.critical, result.summary.high
+            );
             anyhow::bail!("Found vulnerabilities at or above {:?} level", threshold);
         }
     }
