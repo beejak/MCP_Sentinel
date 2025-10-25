@@ -246,6 +246,32 @@ mcp-sentinel scan tests/fixtures/vulnerable_servers/test-server/
 - **CI/CD Templates**: 7 platform integrations
 - **Coverage**: Installation to advanced automation
 
+### 🤖 Documentation Automation
+
+**New for Contributors!** MCP Sentinel features an automated documentation system that ensures every feature comes with complete documentation.
+
+- **[Documentation Automation Guide](DOCUMENTATION_AUTOMATION.md)** - Automated doc generation system
+- **[Feature Checklist](FEATURE_CHECKLIST.md)** - Step-by-step checklist for new features
+
+**Quick Start for Contributors:**
+
+```bash
+# Generate documentation template for new feature
+./scripts/docs/generate-doc.sh --type detector --name "my-detector"
+
+# Validate documentation completeness
+./scripts/docs/validate-docs.sh --all
+
+# CI/CD automatically validates docs on every PR
+```
+
+**Benefits:**
+- ✅ Zero documentation debt
+- ✅ Consistent quality across all docs
+- ✅ Automated validation in CI/CD
+- ✅ Templates for common scenarios
+- ✅ Complete examples generated automatically
+
 ## 🤝 Contributing
 
 MCP Sentinel welcomes contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting PRs.
