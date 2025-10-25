@@ -101,6 +101,8 @@ mcp-sentinel scan ./my-mcp-server --fail-on high
 
 ## 🛠️ Architecture
 
+MCP Sentinel uses a modular, pipeline-based architecture:
+
 ```
 mcp-sentinel/
 ├── src/
@@ -116,6 +118,8 @@ mcp-sentinel/
 │   └── fixtures/      # Test vulnerable servers
 └── Cargo.toml
 ```
+
+For detailed architecture diagrams and component descriptions, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## 🎯 Detection Capabilities
 
@@ -198,14 +202,27 @@ mcp-sentinel scan tests/fixtures/vulnerable_servers/test-server/
 
 ## 📖 Documentation
 
-- [Installation Guide](docs/installation.md) (coming soon)
-- [User Guide](docs/user-guide/) (coming soon)
-- [API Reference](docs/reference/) (coming soon)
-- [Contributing](docs/contributing/) (coming soon)
+- [Architecture Guide](ARCHITECTURE.md) - System design and component details
+- [Implementation Status](IMPLEMENTATION.md) - Detailed feature tracking
+- [Error Handling Strategy](ERROR_HANDLING.md) - Error handling approach
+- [Logging Guide](LOGGING.md) - Logging levels and best practices
+- [Changelog](CHANGELOG.md) - Version history and release notes
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- [Security Policy](SECURITY.md) - Reporting vulnerabilities
 
 ## 🤝 Contributing
 
-MCP Sentinel is in active development. Phase 1 (foundation) is complete. Contributions welcome!
+MCP Sentinel welcomes contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting PRs.
+
+**Ways to contribute**:
+- Report bugs or suggest features via GitHub Issues
+- Improve documentation
+- Add new detection patterns
+- Optimize performance
+- Write tests
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📄 License
 
