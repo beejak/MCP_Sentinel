@@ -105,13 +105,21 @@ impl Scanner {
     /// - **Detector failures**: Logged at WARN level but don't stop other detectors
     /// - **Success**: Returns all found vulnerabilities (can be empty vector)
     ///
-    /// # Detectors Run (in order)
+    /// # Detectors Run (in order) - v1.5.0
     ///
+    /// **Phase 1.0 Detectors:**
     /// 1. Secrets detection - API keys, credentials, tokens
     /// 2. Command injection - os.system(), subprocess, etc.
     /// 3. Sensitive file access - SSH keys, AWS credentials, cookies
     /// 4. Tool poisoning - Malicious tool descriptions, invisible Unicode
     /// 5. Prompt injection - LLM manipulation attempts
+    ///
+    /// **Phase 1.5 Detectors (NEW):**
+    /// 6. Code injection - eval(), exec(), dynamic code execution
+    /// 7. Insecure deserialization - pickle, yaml, marshal
+    /// 8. Path traversal - Directory traversal patterns
+    /// 9. SQL injection - String concatenation in queries
+    /// 10. SSRF - Server-side request forgery
     async fn scan_file(&self, path: &Path) -> Result<Vec<crate::models::Vulnerability>> {
         let mut vulnerabilities = Vec::new();
 
@@ -185,6 +193,63 @@ impl Scanner {
                 vulnerabilities.extend(vulns)
             },
             Err(e) => warn!("Prompt injection detector failed on {}: {}", file_path, e),
+        }
+
+        // ===== NEW v1.5.0 DETECTORS =====
+
+        // 6. Code injection detection (eval, exec, dynamic execution)
+        match crate::detectors::code_injection::detect(&content, &file_path) {
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Code injection detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Code injection detector failed on {}: {}", file_path, e),
+        }
+
+        // 7. Insecure deserialization detection
+        match crate::detectors::deserialization::detect(&content, &file_path) {
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Deserialization detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Deserialization detector failed on {}: {}", file_path, e),
+        }
+
+        // 8. Path traversal detection
+        match crate::detectors::path_traversal::detect(&content, &file_path) {
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Path traversal detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Path traversal detector failed on {}: {}", file_path, e),
+        }
+
+        // 9. SQL injection detection
+        match crate::detectors::sql_injection::detect(&content, &file_path) {
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("SQL injection detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("SQL injection detector failed on {}: {}", file_path, e),
+        }
+
+        // 10. SSRF detection
+        match crate::detectors::ssrf::detect(&content, &file_path) {
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("SSRF detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("SSRF detector failed on {}: {}", file_path, e),
         }
 
         Ok(vulnerabilities)
