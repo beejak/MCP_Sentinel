@@ -227,11 +227,19 @@ Apache 2.0 - See [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-Built with reference to the excellent work by:
-- Invariant Labs (mcp-scan)
+v1.5.0 incorporates best practices from industry-leading scanners:
+- **Cisco AI Defense** - Enterprise architecture and documentation
+- **Invariant Labs** (mcp-scan) - User experience and CLI design
+- **mcpscan.ai** - Comprehensive vulnerability taxonomy
+- **Semgrep** - Pattern-based detection methodology
+- **Tencent AI-Infra-Guard** - AI integration concepts
+
+Earlier inspiration from:
 - Google (mcp-security)
 - Antgroup (MCPScan)
 - Rise and Ignite (mcp-shield)
+
+**Combined their best practices with Rust's 10-100x performance advantage!**
 
 ---
 
