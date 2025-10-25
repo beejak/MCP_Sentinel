@@ -1,0 +1,253 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - '**.md'
+      - 'src/**'
+      - 'examples/**'
+      - '.doc-templates/**'
+      - 'scripts/docs/**'
+  push:
+    branches: [ main ]
+    paths:
+      - '**.md'
+  workflow_dispatch:
+
+jobs:
+  validate-docs:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history for accurate diffs
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/docs/*.sh
+
+      - name: Validate documentation completeness
+        run: |
+          ./scripts/docs/validate-docs.sh --all
+        continue-on-error: false
+
+      - name: Check for broken links
+        run: |
+          # Install markdown-link-check
+          npm install -g markdown-link-check
+
+          # Check all markdown files
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | \
+            xargs -I {} markdown-link-check {} --config .markdown-link-check.json || true
+        continue-on-error: true
+
+      - name: Check for TODO markers
+        run: |
+          TODO_COUNT=$(find . -name "*.md" -not -path "./.git/*" -exec grep -l "TODO\|FIXME\|XXX" {} \; | wc -l)
+          echo "Found $TODO_COUNT files with TODO markers"
+
+          if [ "$TODO_COUNT" -gt 0 ]; then
+            echo "⚠️  Files with TODO markers:"
+            find . -name "*.md" -not -path "./.git/*" -exec grep -l "TODO\|FIXME\|XXX" {} \;
+            echo ""
+            echo "Please complete all TODO items before merging."
+            exit 1
+          fi
+
+      - name: Validate code examples (syntax check)
+        run: |
+          # Check Python examples
+          if command -v python3 &> /dev/null; then
+            echo "Checking Python examples..."
+            find examples -name "*.py" -exec python3 -m py_compile {} \; || true
+          fi
+
+          # Check JavaScript examples
+          if command -v node &> /dev/null; then
+            echo "Checking JavaScript examples..."
+            find examples -name "*.js" -exec node --check {} \; || true
+          fi
+
+      - name: Check CHANGELOG updated
+        if: github.event_name == 'pull_request'
+        run: |
+          if ! git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "CHANGELOG.md"; then
+            echo "⚠️  CHANGELOG.md was not updated"
+            echo "Please add an entry to CHANGELOG.md describing your changes."
+            exit 1
+          else
+            echo "✓ CHANGELOG.md updated"
+          fi
+
+      - name: Generate documentation statistics
+        run: |
+          echo "📊 Documentation Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+
+          # Count documentation files
+          DOC_COUNT=$(find . -maxdepth 1 -name "*.md" | wc -l)
+          echo "| Documentation Files | $DOC_COUNT |" >> $GITHUB_STEP_SUMMARY
+
+          # Count total words
+          TOTAL_WORDS=$(find . -maxdepth 1 -name "*.md" -exec wc -w {} \; | awk '{sum+=$1} END {print sum}')
+          echo "| Total Words | $TOTAL_WORDS |" >> $GITHUB_STEP_SUMMARY
+
+          # Count code examples
+          CODE_BLOCKS=$(find . -maxdepth 1 -name "*.md" -exec grep -c '```' {} \; | awk '{sum+=$1} END {print sum/2}')
+          echo "| Code Examples | $CODE_BLOCKS |" >> $GITHUB_STEP_SUMMARY
+
+          # Count example files
+          EXAMPLE_COUNT=$(find examples -type f -name "*.py" -o -name "*.js" | wc -l)
+          echo "| Example Files | $EXAMPLE_COUNT |" >> $GITHUB_STEP_SUMMARY
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📝 Documentation Validation Failed
+
+            The documentation validation checks have failed. Please review the errors above and fix them before merging.
+
+            ### Common Issues:
+            - Missing required sections in documentation
+            - Broken links
+            - TODO/FIXME markers remaining
+            - CHANGELOG.md not updated
+            - Code examples with syntax errors
+
+            ### How to Fix:
+            1. Run validation locally: \`./scripts/docs/validate-docs.sh --all\`
+            2. Fix any issues reported
+            3. Commit and push your changes
+            4. CI will re-run automatically
+
+            See [DOCUMENTATION_AUTOMATION.md](DOCUMENTATION_AUTOMATION.md) for details.
+            `
+            })
+
+  check-feature-documentation:
+    name: Check Feature Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check for new features
+        id: check_features
+        run: |
+          # Check if new detectors were added
+          NEW_DETECTORS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep "src/detectors/.*\.rs" | grep -v "mod.rs" || true)
+
+          if [ -n "$NEW_DETECTORS" ]; then
+            echo "new_features=true" >> $GITHUB_OUTPUT
+            echo "feature_files=$NEW_DETECTORS" >> $GITHUB_OUTPUT
+
+            echo "🔍 New detectors found:"
+            echo "$NEW_DETECTORS"
+          else
+            echo "new_features=false" >> $GITHUB_OUTPUT
+            echo "No new detectors found"
+          fi
+
+      - name: Validate feature documentation
+        if: steps.check_features.outputs.new_features == 'true'
+        run: |
+          echo "Checking documentation for new features..."
+
+          # Get feature names from file paths
+          FEATURE_FILES="${{ steps.check_features.outputs.feature_files }}"
+
+          for file in $FEATURE_FILES; do
+            FEATURE_NAME=$(basename "$file" .rs | tr '_' '-')
+            echo "Checking documentation for: $FEATURE_NAME"
+
+            # Check if documented in key files
+            MISSING_DOCS=""
+
+            if ! grep -qi "$FEATURE_NAME" USER_GUIDE.md; then
+              MISSING_DOCS="$MISSING_DOCS USER_GUIDE.md"
+            fi
+
+            if ! grep -qi "$FEATURE_NAME" EXAMPLES.md; then
+              MISSING_DOCS="$MISSING_DOCS EXAMPLES.md"
+            fi
+
+            if ! grep -qi "$FEATURE_NAME" README.md; then
+              MISSING_DOCS="$MISSING_DOCS README.md"
+            fi
+
+            if [ -n "$MISSING_DOCS" ]; then
+              echo "❌ Feature '$FEATURE_NAME' not documented in:$MISSING_DOCS"
+              echo ""
+              echo "Please add documentation for this feature using:"
+              echo "  ./scripts/docs/generate-doc.sh --type detector --name $FEATURE_NAME"
+              exit 1
+            else
+              echo "✓ Feature '$FEATURE_NAME' is documented"
+            fi
+          done
+
+      - name: Check example files exist
+        if: steps.check_features.outputs.new_features == 'true'
+        run: |
+          FEATURE_FILES="${{ steps.check_features.outputs.feature_files }}"
+
+          for file in $FEATURE_FILES; do
+            FEATURE_NAME=$(basename "$file" .rs | tr '_' '-')
+            EXAMPLE_DIR="examples/$FEATURE_NAME"
+
+            if [ ! -d "$EXAMPLE_DIR" ]; then
+              echo "⚠️  Example directory not found: $EXAMPLE_DIR"
+              echo "Consider adding examples for this feature"
+            else
+              echo "✓ Examples found for $FEATURE_NAME"
+            fi
+          done
+
+  build-docs-site:
+    name: Build Documentation Site
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install mdBook (if using)
+        run: |
+          # Placeholder for mdBook or other doc site generator
+          echo "Documentation site build would go here"
+
+      - name: Build documentation site
+        run: |
+          echo "Building documentation site..."
+          # This would build a static site from markdown
+          # Could use: mdBook, mkdocs, hugo, etc.
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        run: |
+          echo "Would deploy to GitHub Pages here"
+          # This would push to gh-pages branch
