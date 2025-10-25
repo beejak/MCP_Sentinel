@@ -9,12 +9,17 @@ MCP Sentinel is a next-generation security scanner for Model Context Protocol (M
 
 ## ⚡ Features
 
-- **5 Detection Categories (Phase 1 Complete)**:
+- **10 Detection Categories (v1.5.0 Complete)** 🚀:
   - 🔐 Secrets Detection (15+ patterns including AWS keys, API keys, private keys)
   - 💉 Command Injection (Python, JavaScript/TypeScript patterns)
   - 📁 Sensitive File Access (SSH keys, AWS credentials, browser cookies)
   - 🎣 Tool Poisoning (invisible Unicode, malicious keywords)
   - 🔓 Prompt Injection (jailbreak patterns, system prompt manipulation)
+  - ⚡ Code Injection (20+ patterns: eval, exec, dynamic code execution) **NEW v1.5**
+  - 📦 Insecure Deserialization (10+ patterns: pickle, yaml, marshal) **NEW v1.5**
+  - 🔀 Path Traversal (8+ patterns: directory traversal attacks) **NEW v1.5**
+  - 💾 SQL Injection (12+ patterns: string concatenation in queries) **NEW v1.5**
+  - 🌐 SSRF (10+ patterns: server-side request forgery) **NEW v1.5**
 
 - **Beautiful Terminal Output**:
   - Colored, hierarchical vulnerability display
