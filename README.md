@@ -157,7 +157,7 @@ For detailed architecture diagrams and component descriptions, see [ARCHITECTURE
 ## 📝 Example Output
 
 ```
-🛡️  MCP Sentinel v1.0.0
+🛡️  MCP Sentinel v1.5.0
 
 📂 Scanning: ./vulnerable-server
 🔍 Engines: Static Analysis ✓
