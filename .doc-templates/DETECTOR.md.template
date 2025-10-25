@@ -1,0 +1,485 @@
+# {{DETECTOR_NAME}} Detector Documentation
+
+**Status:** Draft
+**Version:** {{VERSION}}
+**Author:** {{AUTHOR}}
+**Date:** {{DATE}}
+
+---
+
+## ✅ Documentation Checklist
+
+Complete all sections before marking this detector as "done":
+
+- [ ] Overview - What does this detector find?
+- [ ] Patterns - All detection patterns documented
+- [ ] Examples - At least 3 vulnerable + fixed code examples
+- [ ] Configuration - How to enable/disable
+- [ ] False Positives - Known false positive scenarios
+- [ ] CWE Mapping - CWE IDs covered
+- [ ] Integration - Added to USER_GUIDE.md
+- [ ] Integration - Added to EXAMPLES.md
+- [ ] Integration - Added to TROUBLESHOOTING.md
+- [ ] Integration - Added to FAQ.md
+- [ ] Integration - Updated README.md feature list
+- [ ] Integration - Updated CHANGELOG.md
+- [ ] Tests - Unit tests written
+- [ ] Tests - Integration tests written
+
+---
+
+## Overview
+
+### What does it detect?
+
+[Describe what vulnerabilities this detector finds. Be specific.]
+
+**Example:**
+> The {{DETECTOR_NAME}} detector identifies instances where... This is dangerous because...
+
+### Why is this important?
+
+[Explain the security impact and real-world scenarios]
+
+**Example:**
+> This vulnerability can lead to... Attackers can exploit this by... Real-world incidents include...
+
+### Severity Level
+
+- **Default Severity:** [Critical | High | Medium | Low]
+- **Can vary based on:** [Context-specific factors]
+
+---
+
+## Detection Patterns
+
+### Pattern Categories
+
+List all patterns this detector uses:
+
+#### Category 1: [Name]
+
+```regex
+# Pattern 1
+{{PATTERN_REGEX_1}}
+
+# Pattern 2
+{{PATTERN_REGEX_2}}
+```
+
+**What these patterns catch:**
+- [Specific vulnerability type 1]
+- [Specific vulnerability type 2]
+
+#### Category 2: [Name]
+
+```regex
+# Pattern 3
+{{PATTERN_REGEX_3}}
+```
+
+**What these patterns catch:**
+- [Specific vulnerability type 3]
+
+### Pattern Details
+
+For each major pattern, provide:
+
+| Pattern | Language | Description | Example |
+|---------|----------|-------------|---------|
+| {{PATTERN_NAME_1}} | Python | {{DESCRIPTION}} | `{{CODE_EXAMPLE}}` |
+| {{PATTERN_NAME_2}} | JavaScript | {{DESCRIPTION}} | `{{CODE_EXAMPLE}}` |
+
+---
+
+## Language Support
+
+Which languages/frameworks does this detector support?
+
+- [x] Python
+- [x] JavaScript/TypeScript
+- [ ] Ruby
+- [ ] PHP
+- [ ] Java
+- [ ] Go
+- [ ] Other: [specify]
+
+---
+
+## Examples
+
+### Example 1: [Scenario Name]
+
+**Vulnerable Code:**
+
+```python
+# ❌ Vulnerable: [Explain why this is vulnerable]
+{{VULNERABLE_CODE_EXAMPLE_1}}
+```
+
+**What MCP Sentinel detects:**
+```
+[{{DETECTOR_NAME}}-001] {{VULNERABILITY_TITLE}}
+📄 File: example.py:5
+📝 Context: {{CODE_CONTEXT}}
+💡 Recommendation: {{FIX_RECOMMENDATION}}
+```
+
+**Fixed Code:**
+
+```python
+# ✅ Secure: [Explain how this fixes the vulnerability]
+{{FIXED_CODE_EXAMPLE_1}}
+```
+
+**Why this works:**
+[Explain the security improvement]
+
+---
+
+### Example 2: [Scenario Name]
+
+**Vulnerable Code:**
+
+```javascript
+// ❌ Vulnerable: [Explain why this is vulnerable]
+{{VULNERABLE_CODE_EXAMPLE_2}}
+```
+
+**What MCP Sentinel detects:**
+```
+[{{DETECTOR_NAME}}-002] {{VULNERABILITY_TITLE}}
+📄 File: example.js:10
+📝 Context: {{CODE_CONTEXT}}
+💡 Recommendation: {{FIX_RECOMMENDATION}}
+```
+
+**Fixed Code:**
+
+```javascript
+// ✅ Secure: [Explain how this fixes the vulnerability]
+{{FIXED_CODE_EXAMPLE_2}}
+```
+
+---
+
+### Example 3: [Scenario Name]
+
+[Add at least one more example. More is better!]
+
+---
+
+## Configuration
+
+### Enabling/Disabling
+
+```bash
+# Run only this detector
+mcp-sentinel scan . --only-detector {{DETECTOR_ID}}
+
+# Disable this detector
+mcp-sentinel scan . --disable-detector {{DETECTOR_ID}}
+
+# Scan with specific severity threshold
+mcp-sentinel scan . --min-severity {{DEFAULT_SEVERITY}}
+```
+
+### Custom Rules (Future)
+
+```yaml
+# .mcp-sentinel.yml (planned for v2.0)
+detectors:
+  {{DETECTOR_ID}}:
+    enabled: true
+    severity: {{DEFAULT_SEVERITY}}
+    patterns:
+      - custom-pattern-1
+      - custom-pattern-2
+    exclude:
+      - "tests/*"
+      - "examples/*"
+```
+
+---
+
+## False Positives
+
+### Known False Positive Scenarios
+
+#### Scenario 1: [Description]
+
+**Code:**
+```python
+{{FALSE_POSITIVE_EXAMPLE_1}}
+```
+
+**Why flagged:**
+[Explain pattern match]
+
+**Why it's safe:**
+[Explain why this specific case is actually safe]
+
+**Workaround:**
+```python
+# Option 1: Refactor to avoid pattern
+{{REFACTORED_CODE}}
+
+# Option 2: Suppress with comment (future)
+{{CODE_WITH_SUPPRESSION_COMMENT}}
+
+# Option 3: Exclude file
+# Add to .mcp-sentinel-ignore
+```
+
+#### Scenario 2: [Description]
+
+[Add more known false positives]
+
+---
+
+## CWE Mapping
+
+### CWE Coverage
+
+This detector covers the following CWE categories:
+
+- **[CWE-XXX](https://cwe.mitre.org/data/definitions/XXX.html)**: {{CWE_TITLE}}
+  - **Description:** [Brief CWE description]
+  - **Severity:** [CVSS score/severity]
+
+- **[CWE-YYY](https://cwe.mitre.org/data/definitions/YYY.html)**: {{CWE_TITLE}}
+  - **Description:** [Brief CWE description]
+  - **Severity:** [CVSS score/severity]
+
+### Compliance Frameworks
+
+This detector helps with compliance for:
+
+- ✅ **OWASP Top 10** - [Specific item]
+- ✅ **CWE Top 25** - [Specific rank]
+- ✅ **PCI DSS** - Requirement [X.Y]
+- ✅ **SOC 2** - Control [X.Y.Z]
+
+---
+
+## Integration
+
+### USER_GUIDE.md Section
+
+Add this section to USER_GUIDE.md under "Detectors Deep Dive":
+
+```markdown
+### {{DETECTOR_NUMBER}}. {{DETECTOR_NAME}} Detector
+
+**Purpose:** {{PURPOSE}}
+
+**Patterns detected ([X]+):**
+- [Pattern 1 description]
+- [Pattern 2 description]
+...
+
+**Example vulnerabilities:**
+[Code example]
+
+**Severity:** {{DEFAULT_SEVERITY}}
+
+**CWE:** {{CWE_IDS}}
+```
+
+### EXAMPLES.md Section
+
+Add real-world example to EXAMPLES.md:
+
+```markdown
+### Scenario X: {{SCENARIO_NAME}}
+
+**Problem:** {{PROBLEM_DESCRIPTION}}
+
+**vulnerable_code.{{EXT}}:**
+[Vulnerable code]
+
+**Scan:**
+[Scan command and output]
+
+**Fixed version:**
+[Fixed code]
+```
+
+### TROUBLESHOOTING.md Section
+
+Add common issues to TROUBLESHOOTING.md:
+
+```markdown
+### Issue: {{DETECTOR_NAME}} false positives in [scenario]
+
+**Symptoms:**
+[Description]
+
+**Solutions:**
+1. [Solution 1]
+2. [Solution 2]
+```
+
+### FAQ.md Entries
+
+Add to FAQ.md:
+
+```markdown
+### Does {{DETECTOR_NAME}} detect [specific case]?
+
+[Answer]
+
+### Why am I getting false positives with {{DETECTOR_NAME}}?
+
+[Answer]
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Issue 1: [Issue Name]
+
+**Symptoms:**
+[What users will see]
+
+**Cause:**
+[Why this happens]
+
+**Solution:**
+```bash
+# Step-by-step fix
+[commands]
+```
+
+#### Issue 2: [Issue Name]
+
+[Add more issues]
+
+---
+
+## Performance
+
+### Benchmarks
+
+Expected performance for this detector:
+
+| Project Size | Files | Scan Time | Overhead |
+|--------------|-------|-----------|----------|
+| Small | 50 | {{TIME}}ms | {{PERCENT}}% |
+| Medium | 500 | {{TIME}}ms | {{PERCENT}}% |
+| Large | 5,000 | {{TIME}}s | {{PERCENT}}% |
+
+**Notes:** [Any performance considerations]
+
+---
+
+## Testing
+
+### Unit Tests
+
+**Location:** `tests/detectors/{{DETECTOR_ID}}_test.rs`
+
+**Test Coverage:**
+- [ ] Basic pattern matching
+- [ ] Language-specific patterns
+- [ ] Edge cases
+- [ ] False positive scenarios
+- [ ] Multi-line patterns
+- [ ] Unicode handling
+- [ ] Performance benchmarks
+
+**Example test:**
+```rust
+#[test]
+fn test_{{DETECTOR_ID}}_basic() {
+    let code = r#"
+        {{TEST_CODE}}
+    "#;
+
+    let vulnerabilities = detect(code, "test.py");
+    assert_eq!(vulnerabilities.len(), 1);
+    assert_eq!(vulnerabilities[0].severity, Severity::{{SEVERITY}});
+}
+```
+
+### Integration Tests
+
+**Location:** `tests/integration/{{DETECTOR_ID}}_integration_test.rs`
+
+**Test scenarios:**
+- [ ] Scan real project with known vulnerabilities
+- [ ] Verify JSON output format
+- [ ] Verify SARIF output format
+- [ ] Test with CI/CD pipeline
+- [ ] Test with pre-commit hook
+
+---
+
+## Implementation Notes
+
+### Code Location
+
+- **Detector implementation:** `src/detectors/{{DETECTOR_ID}}.rs`
+- **Pattern definitions:** [Location of regex patterns]
+- **Tests:** `tests/detectors/{{DETECTOR_ID}}_test.rs`
+
+### Dependencies
+
+[List any external crates or dependencies needed]
+
+### Future Enhancements
+
+Ideas for improving this detector:
+
+1. [Enhancement 1]
+2. [Enhancement 2]
+3. [Enhancement 3]
+
+---
+
+## References
+
+### External Resources
+
+- [Link to relevant security documentation]
+- [Link to CWE definitions]
+- [Link to OWASP resources]
+- [Link to real-world exploits/examples]
+
+### Internal References
+
+- [USER_GUIDE.md](USER_GUIDE.md#{{DETECTOR_ID}})
+- [EXAMPLES.md](EXAMPLES.md#{{DETECTOR_ID}})
+- [CHANGELOG.md](CHANGELOG.md)
+
+---
+
+## Sign-off
+
+### Completion Checklist
+
+Before marking this detector as "complete", verify:
+
+- [ ] All sections of this document filled in
+- [ ] At least 3 code examples (vulnerable + fixed)
+- [ ] All integration points updated (USER_GUIDE, EXAMPLES, etc.)
+- [ ] Unit tests written and passing
+- [ ] Integration tests written and passing
+- [ ] Performance benchmarks run
+- [ ] Peer review completed
+- [ ] Documentation review completed
+- [ ] CI/CD validation passing
+
+### Review
+
+- **Code Review:** [Reviewer name] - [Date]
+- **Documentation Review:** [Reviewer name] - [Date]
+- **Final Approval:** [Approver name] - [Date]
+
+---
+
+**Status:** [Draft | In Review | Approved | Released]
+**Released in version:** [Version number]
