@@ -6,7 +6,8 @@ pub mod monitor;
 pub mod proxy;
 pub mod rules;
 pub mod scan;
+pub mod types;
 pub mod whitelist;
 
-// Re-export command types used in main.rs
-pub use crate::main::{LlmProvider, OutputFormat, ScanMode, SeverityLevel};
+// Re-export common types
+pub use types::{LlmProvider, OutputFormat, ScanMode, SeverityLevel};
