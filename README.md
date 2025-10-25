@@ -235,4 +235,6 @@ Built with reference to the excellent work by:
 
 ---
 
-**Status**: Phase 1 Complete ✅ | Next: Phase 2 (AI Analysis & Advanced Detection)
+**Status**: v1.5.0 Released 🚀 | 10 Detectors | 80+ Patterns | Industry-Leading Performance
+
+**Repository**: https://github.com/beejak/MCP_Sentinel
