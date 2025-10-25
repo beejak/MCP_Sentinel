@@ -1,0 +1,46 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test artifacts
+*.profraw
+*.profdata
+
+# Runtime artifacts
+*.log
+*.pid
+
+# Local configuration
+.env
+.env.local
+config.local.yaml
+
+# MCP Sentinel runtime files
+.mcp-sentinel/
+*.db
+*.sled/
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Reports
+*.html
+*.pdf
+*.sarif
+mcp-sentinel-report.*
+
+# Benchmark outputs
+/benches/results/
+
+# Coverage reports
+/coverage/
+lcov.info
