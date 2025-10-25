@@ -64,7 +64,8 @@ impl Scanner {
         let content = match crate::utils::file::read_file(path) {
             Ok(c) => c,
             Err(e) => {
-                debug!("Failed to read {}: {}", path.display(), e);
+                // Common scenarios: binary files, permission denied, invalid UTF-8
+                debug!("Skipping file {}: {}", path.display(), e);
                 return Ok(vulnerabilities);
             }
         };
@@ -76,32 +77,57 @@ impl Scanner {
 
         // 1. Secrets detection
         match crate::detectors::secrets::detect(&content, &file_path) {
-            Ok(vulns) => vulnerabilities.extend(vulns),
-            Err(e) => debug!("Secrets detector failed on {}: {}", file_path, e),
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Secrets detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Secrets detector failed on {}: {}", file_path, e),
         }
 
         // 2. Command injection detection
         match crate::detectors::code_vulns::detect_command_injection(&content, &file_path) {
-            Ok(vulns) => vulnerabilities.extend(vulns),
-            Err(e) => debug!("Command injection detector failed on {}: {}", file_path, e),
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Command injection detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Command injection detector failed on {}: {}", file_path, e),
         }
 
         // 3. Sensitive file access detection
         match crate::detectors::code_vulns::detect_sensitive_file_access(&content, &file_path) {
-            Ok(vulns) => vulnerabilities.extend(vulns),
-            Err(e) => debug!("Sensitive file detector failed on {}: {}", file_path, e),
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Sensitive file detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Sensitive file detector failed on {}: {}", file_path, e),
         }
 
         // 4. Tool poisoning detection
         match crate::detectors::tool_poisoning::detect(&content) {
-            Ok(vulns) => vulnerabilities.extend(vulns),
-            Err(e) => debug!("Tool poisoning detector failed on {}: {}", file_path, e),
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Tool poisoning detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Tool poisoning detector failed on {}: {}", file_path, e),
         }
 
         // 5. Prompt injection detection
         match crate::detectors::prompt_injection::detect(&content) {
-            Ok(vulns) => vulnerabilities.extend(vulns),
-            Err(e) => debug!("Prompt injection detector failed on {}: {}", file_path, e),
+            Ok(vulns) => {
+                if !vulns.is_empty() {
+                    debug!("Prompt injection detector found {} issues in {}", vulns.len(), file_path);
+                }
+                vulnerabilities.extend(vulns)
+            },
+            Err(e) => warn!("Prompt injection detector failed on {}: {}", file_path, e),
         }
 
         Ok(vulnerabilities)
