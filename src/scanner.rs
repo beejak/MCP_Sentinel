@@ -3,7 +3,7 @@
 use anyhow::{Context, Result};
 use std::path::Path;
 use std::time::Instant;
-use tracing::{debug, info, warn};
+use tracing::{debug, error, info, warn};
 
 use crate::models::{config::ScanConfig, scan_result::ScanResult};
 
@@ -32,10 +32,19 @@ impl Scanner {
         );
 
         // Phase 1: Discover files
-        debug!("Discovering files...");
-        let files = crate::utils::file::discover_files(path, &self.config.exclude_patterns)
-            .context("Failed to discover files")?;
+        debug!("Discovering files in {}...", path.display());
+        let files = match crate::utils::file::discover_files(path, &self.config.exclude_patterns) {
+            Ok(f) => f,
+            Err(e) => {
+                error!("Failed to discover files in {}: {}", path.display(), e);
+                return Err(e).context("Failed to discover files");
+            }
+        };
         info!("Found {} files to scan", files.len());
+
+        if files.is_empty() {
+            warn!("No scannable files found in {}. Looking for: .py, .js, .ts, .jsx, .tsx, .json, .yaml", path.display());
+        }
 
         // Phase 1: Scan each file
         for file in &files {
