@@ -59,10 +59,12 @@ pub async fn execute(
             crate::output::terminal::render(&result)?;
         }
         OutputFormat::Json => {
-            let json = crate::output::json::generate(&result)?;
+            let json = crate::output::json::generate(&result)
+                .context("Failed to generate JSON report")?;
             if let Some(file_path) = &output_file {
-                std::fs::write(file_path, json)?;
-                println!("Report saved to: {}", file_path);
+                std::fs::write(file_path, &json)
+                    .context(format!("Failed to write report to '{}'", file_path))?;
+                println!("✅ Report saved to: {}", file_path);
             } else {
                 println!("{}", json);
             }
