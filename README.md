@@ -41,8 +41,8 @@ MCP Sentinel is a next-generation security scanner for Model Context Protocol (M
 cargo install mcp-sentinel
 
 # Or build from source
-git clone https://github.com/yourusername/MCP_Scanner
-cd MCP_Scanner
+git clone https://github.com/beejak/MCP_Sentinel.git
+cd MCP_Sentinel
 cargo build --release
 ```
 
