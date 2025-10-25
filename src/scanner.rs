@@ -3,7 +3,7 @@
 use anyhow::{Context, Result};
 use std::path::Path;
 use std::time::Instant;
-use tracing::{debug, info};
+use tracing::{debug, info, warn};
 
 use crate::models::{config::ScanConfig, scan_result::ScanResult};
 
