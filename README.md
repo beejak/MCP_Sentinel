@@ -199,14 +199,52 @@ mcp-sentinel scan tests/fixtures/vulnerable_servers/test-server/
 
 ## 📖 Documentation
 
-- [Architecture Guide](ARCHITECTURE.md) - System design and component details
-- [Implementation Status](IMPLEMENTATION.md) - Detailed feature tracking
-- [Error Handling Strategy](ERROR_HANDLING.md) - Error handling approach
-- [Logging Guide](LOGGING.md) - Logging levels and best practices
-- [Changelog](CHANGELOG.md) - Version history and release notes
-- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
-- [Security Policy](SECURITY.md) - Reporting vulnerabilities
+### 🚀 Getting Started
+
+- **[Getting Started Guide](GETTING_STARTED.md)** - Installation, first scan, and understanding results
+- **[Quick Reference Card](GETTING_STARTED.md#quick-reference-card)** - Common commands at a glance
+
+### 📚 User Guides
+
+- **[User Guide](USER_GUIDE.md)** - Complete feature documentation, all commands and options
+- **[Examples](EXAMPLES.md)** - Real-world use cases, before/after fixes, language-specific examples
+- **[Command Reference](COMMAND_REFERENCE.md)** - Detailed CLI command syntax and options
+
+### 🔧 Integration & Configuration
+
+- **[CI/CD Integration](CI_CD_INTEGRATION.md)** - GitHub Actions, GitLab CI, Jenkins, Azure DevOps, CircleCI
+- **[Best Practices](BEST_PRACTICES.md)** - Security scanning best practices, team processes, workflows
+- **[Advanced Usage](ADVANCED_USAGE.md)** - Power user features, custom workflows, automation scripts
+
+### 🆘 Help & Support
+
+- **[FAQ](FAQ.md)** - Frequently asked questions and answers
+- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
+
+### 🏗️ Technical Documentation
+
+- **[Architecture Guide](ARCHITECTURE.md)** - System design and component details
+- **[Implementation Status](IMPLEMENTATION.md)** - Detailed feature tracking
+- **[Error Handling Strategy](ERROR_HANDLING.md)** - Error handling approach
+- **[Logging Guide](LOGGING.md)** - Logging levels and best practices
+- **[Testing Strategy](TESTING_STRATEGY.md)** - Unit tests, integration tests, QA approach
+
+### 📋 Project Information
+
+- **[Changelog](CHANGELOG.md)** - Version history and release notes
+- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community standards
+- **[Security Policy](SECURITY.md)** - Reporting vulnerabilities
+- **[v1.5.0 Release Summary](V1.5_RELEASE_SUMMARY.md)** - What's new in v1.5.0
+- **[v1.5.0 Enhancement Plan](V1.5_ENHANCEMENT_PLAN.md)** - Competitive analysis and strategy
+
+### 📖 Documentation Statistics
+
+- **Total Documentation**: 30,000+ words
+- **Guides**: 9 comprehensive user guides
+- **Examples**: 50+ real-world code examples
+- **CI/CD Templates**: 7 platform integrations
+- **Coverage**: Installation to advanced automation
 
 ## 🤝 Contributing
 
