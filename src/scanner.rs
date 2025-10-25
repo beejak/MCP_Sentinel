@@ -40,9 +40,8 @@ impl Scanner {
         // Phase 1: Scan each file
         for file in &files {
             debug!("Scanning file: {}", file.display());
-            // TODO: Implement actual scanning
-            // let vulns = self.scan_file(file).await?;
-            // result.add_vulnerabilities(vulns);
+            let vulns = self.scan_file(file).await?;
+            result.add_vulnerabilities(vulns);
         }
 
         // Set scan duration
@@ -58,9 +57,49 @@ impl Scanner {
     }
 
     /// Scan a single file
-    async fn _scan_file(&self, _path: &Path) -> Result<Vec<crate::models::Vulnerability>> {
-        // Phase 1 implementation
-        Ok(Vec::new())
+    async fn scan_file(&self, path: &Path) -> Result<Vec<crate::models::Vulnerability>> {
+        let mut vulnerabilities = Vec::new();
+
+        // Read file content
+        let content = match crate::utils::file::read_file(path) {
+            Ok(c) => c,
+            Err(e) => {
+                debug!("Failed to read {}: {}", path.display(), e);
+                return Ok(vulnerabilities);
+            }
+        };
+
+        let file_path = path.to_string_lossy().to_string();
+
+        // Run all detectors
+        debug!("Running detectors on {}", file_path);
+
+        // 1. Secrets detection
+        if let Ok(vulns) = crate::detectors::secrets::detect(&content, &file_path) {
+            vulnerabilities.extend(vulns);
+        }
+
+        // 2. Command injection detection
+        if let Ok(vulns) = crate::detectors::code_vulns::detect_command_injection(&content, &file_path) {
+            vulnerabilities.extend(vulns);
+        }
+
+        // 3. Sensitive file access detection
+        if let Ok(vulns) = crate::detectors::code_vulns::detect_sensitive_file_access(&content, &file_path) {
+            vulnerabilities.extend(vulns);
+        }
+
+        // 4. Tool poisoning detection
+        if let Ok(vulns) = crate::detectors::tool_poisoning::detect(&content) {
+            vulnerabilities.extend(vulns);
+        }
+
+        // 5. Prompt injection detection
+        if let Ok(vulns) = crate::detectors::prompt_injection::detect(&content) {
+            vulnerabilities.extend(vulns);
+        }
+
+        Ok(vulnerabilities)
     }
 }
 
