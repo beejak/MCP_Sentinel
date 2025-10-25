@@ -64,45 +64,37 @@ mcp-sentinel scan ./my-mcp-server --output json
 mcp-sentinel scan ./my-mcp-server --fail-on high
 ```
 
-## 📊 Phase 1 Implementation Status
+## 📊 Implementation Status
 
-### ✅ Completed
+### ✅ v1.5.0 Complete (Current Release)
 
-- [x] Project structure and build configuration
+- [x] **10 Security Detectors** with 80+ detection patterns
 - [x] CLI framework (7 commands: scan, proxy, monitor, audit, init, whitelist, rules)
 - [x] Core data models (Vulnerability, ScanResult, Config)
 - [x] File discovery and traversal utilities
 - [x] Terminal output renderer with colors
 - [x] JSON output generator
-- [x] 5 vulnerability detectors with comprehensive patterns
-- [x] Scanner engine with parallel processing
-- [x] Scan command fully functional
+- [x] Scanner engine with graceful error handling
+- [x] Comprehensive documentation (16,000+ words)
 - [x] Test fixtures with vulnerable code samples
 
-### 🔄 In Progress / Next Steps
+### 🔄 Next: v1.6.0
 
-**Phase 2 (Weeks 5-8):**
+- [ ] Whitelist/allowlist system implementation
+- [ ] Async job-based scanning
+- [ ] CSV and HTML export formats
+- [ ] 80+ unit tests
+- [ ] Integration test suite
+- [ ] Performance benchmarks
+
+### 🚀 Future: v2.0.0
+
+- [ ] Tree-sitter AST parsing
 - [ ] Semgrep integration
-- [ ] Tree-sitter code parsing
 - [ ] AI analysis engine (OpenAI, Anthropic, Ollama)
-- [ ] HTML report generator
-- [ ] GitHub repository scanning
-- [ ] Configuration file support
-- [ ] Additional detectors (PII, toxic flows, anomalies)
-
-**Phase 3 (Weeks 9-12):**
 - [ ] Runtime proxy engine
-- [ ] Guardrails enforcement
 - [ ] Web dashboard
-- [ ] Real-time monitoring
-- [ ] Rug pull detection
-
-**Phase 4 (Weeks 13-16):**
-- [ ] PDF report generation
 - [ ] SARIF output format
-- [ ] Whitelist management
-- [ ] Performance optimizations
-- [ ] Comprehensive documentation
 
 ## 🛠️ Architecture
 
