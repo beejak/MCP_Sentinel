@@ -75,28 +75,33 @@ impl Scanner {
         debug!("Running detectors on {}", file_path);
 
         // 1. Secrets detection
-        if let Ok(vulns) = crate::detectors::secrets::detect(&content, &file_path) {
-            vulnerabilities.extend(vulns);
+        match crate::detectors::secrets::detect(&content, &file_path) {
+            Ok(vulns) => vulnerabilities.extend(vulns),
+            Err(e) => debug!("Secrets detector failed on {}: {}", file_path, e),
         }
 
         // 2. Command injection detection
-        if let Ok(vulns) = crate::detectors::code_vulns::detect_command_injection(&content, &file_path) {
-            vulnerabilities.extend(vulns);
+        match crate::detectors::code_vulns::detect_command_injection(&content, &file_path) {
+            Ok(vulns) => vulnerabilities.extend(vulns),
+            Err(e) => debug!("Command injection detector failed on {}: {}", file_path, e),
         }
 
         // 3. Sensitive file access detection
-        if let Ok(vulns) = crate::detectors::code_vulns::detect_sensitive_file_access(&content, &file_path) {
-            vulnerabilities.extend(vulns);
+        match crate::detectors::code_vulns::detect_sensitive_file_access(&content, &file_path) {
+            Ok(vulns) => vulnerabilities.extend(vulns),
+            Err(e) => debug!("Sensitive file detector failed on {}: {}", file_path, e),
         }
 
         // 4. Tool poisoning detection
-        if let Ok(vulns) = crate::detectors::tool_poisoning::detect(&content) {
-            vulnerabilities.extend(vulns);
+        match crate::detectors::tool_poisoning::detect(&content) {
+            Ok(vulns) => vulnerabilities.extend(vulns),
+            Err(e) => debug!("Tool poisoning detector failed on {}: {}", file_path, e),
         }
 
         // 5. Prompt injection detection
-        if let Ok(vulns) = crate::detectors::prompt_injection::detect(&content) {
-            vulnerabilities.extend(vulns);
+        match crate::detectors::prompt_injection::detect(&content) {
+            Ok(vulns) => vulnerabilities.extend(vulns),
+            Err(e) => debug!("Prompt injection detector failed on {}: {}", file_path, e),
         }
 
         Ok(vulnerabilities)
